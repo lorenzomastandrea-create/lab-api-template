@@ -1,0 +1,27 @@
+{
+  "name": "Portale Assistenza — ITS D.E.Mo.S.",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+
+  // Due porte, due programmi diversi:
+  //   8000 = l'API (uvicorn)        -> risponde JSON
+  //   5500 = la pagina (http.server) -> risponde HTML
+  // "public" vuol dire che il browser puo' chiamarle senza fare login su GitHub.
+  // Se restano private, GitHub risponde con la propria pagina di login e la
+  // pagina riceve HTML al posto del JSON, senza dire perche'.
+  "forwardPorts": [8000, 5500],
+  "portsAttributes": {
+    "8000": { "label": "API (uvicorn)",   "onAutoForward": "notify", "visibility": "public" },
+    "5500": { "label": "Pagina (frontend)", "onAutoForward": "notify", "visibility": "public" }
+  },
+
+  "postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "GitHub.copilot", "GitHub.copilot-chat"],
+      "settings": {
+        "github.copilot.enable": { "*": false, "markdown": false, "python": false },
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+/* ===========================================================================
+   style.css — l'aspetto della pagina. Nessuna logica qui dentro.
+   ===========================================================================
+   I colori stanno tutti qui in cima, in un posto solo: per cambiare la
+   palette del portale si toccano queste righe e basta.
+   =========================================================================== */
+
+:root {
+  --blu:          #065A82;   /* il blu del corso */
+  --blu-chiaro:   #1c7fa8;
+  --sfondo:       #f4f7f9;
+  --scheda:       #ffffff;
+  --testo:        #1a2733;
+  --testo-tenue:  #5a6b7a;
+  --bordo:        #dde5eb;
+
+  --verde:        #1a7f52;   /* chiuso */
+  --verde-sfondo: #e6f4ed;
+  --ambra:        #b45309;   /* in lavorazione */
+  --ambra-sfondo: #fdf3e3;
+  --rosso:        #b3261e;   /* errori */
+  --rosso-sfondo: #fdeceb;
+  --blu-sfondo:   #e7f1f7;   /* aperto */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--sfondo);
+  color: var(--testo);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.contenitore { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+
+/* --- Intestazione ------------------------------------------------------- */
+
+.intestazione {
+  background: linear-gradient(135deg, var(--blu), var(--blu-chiaro));
+  color: #fff;
+  padding: 22px 0;
+}
+.intestazione__riga {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.intestazione__ente {
+  margin: 0 0 2px; font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 0.1em; opacity: 0.85;
+}
+.intestazione__titolo { margin: 0; font-size: 1.6rem; letter-spacing: -0.01em; }
+
+/* Lo stato del server, in alto a destra */
+.stato-server {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.14); border-radius: 999px;
+  padding: 6px 14px; font-size: 0.85rem;
+}
+.pallino {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #cbd5e0;                 /* grigio finche' non sappiamo */
+}
+.pallino--vivo { background: #4ade80; }
+.pallino--giu  { background: #f87171; }
+
+/* --- Schede ------------------------------------------------------------- */
+
+.scheda {
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin: 24px 0;
+}
+.scheda__titolo { margin: 0 0 4px; font-size: 1.1rem; }
+.scheda__nota { margin: 0 0 18px; color: var(--testo-tenue); font-size: 0.9rem; }
+.scheda__intestazione {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+}
+
+/* --- Form --------------------------------------------------------------- */
+
+.form { display: grid; gap: 16px; }
+.campo { display: grid; gap: 5px; }
+.campo--meta { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.campo--meta > div { display: grid; gap: 5px; }
+
+label { font-weight: 600; font-size: 0.86rem; }
+.campo__aiuto { color: var(--testo-tenue); font-size: 0.78rem; }
+
+input, textarea, select {
+  font: inherit; color: inherit;
+  padding: 9px 11px;
+  border: 1px solid var(--bordo); border-radius: 8px;
+  background: #fff; width: 100%;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--blu-chiaro); outline-offset: 1px; border-color: transparent;
+}
+textarea { resize: vertical; }
+
+.bottone {
+  font: inherit; font-weight: 600;
+  padding: 9px 18px; border-radius: 8px; border: 1px solid transparent;
+  cursor: pointer;
+}
+.bottone:disabled { opacity: .55; cursor: progress; }
+.bottone--primario   { background: var(--blu); color: #fff; }
+.bottone--primario:hover:not(:disabled) { background: var(--blu-chiaro); }
+.bottone--secondario { background: #fff; color: var(--blu); border-color: var(--bordo); }
+.bottone--secondario:hover { border-color: var(--blu-chiaro); }
+
+.filtri { display: flex; align-items: center; gap: 8px; }
+.filtri label { color: var(--testo-tenue); font-weight: 500; }
+.filtri select { width: auto; }
+
+/* --- Messaggi ----------------------------------------------------------- */
+
+.messaggio {
+  margin: 12px 0 0; padding: 10px 14px; border-radius: 8px;
+  background: var(--blu-sfondo); color: var(--blu); font-size: 0.9rem;
+}
+.messaggio--attesa   { background: var(--sfondo); color: var(--testo-tenue); }
+.messaggio--ok       { background: var(--verde-sfondo); color: var(--verde); }
+.messaggio--errore   { background: var(--rosso-sfondo); color: var(--rosso); }
+
+/* --- Tabella ------------------------------------------------------------ */
+
+.tabella { width: 100%; border-collapse: collapse; }
+.tabella th {
+  text-align: left; font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--testo-tenue);
+  padding: 8px 10px; border-bottom: 2px solid var(--bordo);
+}
+.tabella td {
+  padding: 11px 10px; border-bottom: 1px solid var(--bordo); vertical-align: top;
+}
+.tabella tr:last-child td { border-bottom: none; }
+
+.colonna-id     { width: 48px; }
+.colonna-stato  { width: 150px; }
+.colonna-data   { width: 110px; }
+.colonna-azioni { width: 90px; text-align: right; }
+
+.cella-id          { color: var(--testo-tenue); font-variant-numeric: tabular-nums; }
+.cella-titolo      { font-weight: 600; }
+.cella-descrizione { color: var(--testo-tenue); font-size: 0.88rem; margin-top: 2px; }
+.cella-data        { color: var(--testo-tenue); font-size: 0.85rem; white-space: nowrap; }
+
+/* Lo stato: un menu colorato. Si legge come un'etichetta, ma e' cliccabile e
+   cambia lo stato del ticket. Il colore lo decide la classe che mette app.js. */
+.select-stato {
+  width: 100%; padding: 5px 10px;
+  font-size: 0.82rem; font-weight: 600;
+  border-radius: 999px; border: 1px solid transparent;
+  background-color: var(--blu-sfondo); color: var(--blu);
+  cursor: pointer;
+}
+.select-stato--aperto         { background-color: var(--blu-sfondo);   color: var(--blu); }
+.select-stato--in_lavorazione { background-color: var(--ambra-sfondo); color: var(--ambra); }
+.select-stato--chiuso         { background-color: var(--verde-sfondo); color: var(--verde); }
+.select-stato:hover           { border-color: currentColor; }
+
+.bottone-elimina {
+  background: none; border: 1px solid var(--bordo); border-radius: 7px;
+  cursor: pointer; padding: 4px 9px; font-size: 0.95rem; line-height: 1;
+  color: var(--testo-tenue);
+}
+.bottone-elimina:hover { border-color: var(--rosso); color: var(--rosso); background: var(--rosso-sfondo); }
+
+/* --- Piede -------------------------------------------------------------- */
+
+.pie {
+  margin-top: 40px; padding: 20px 0 36px;
+  border-top: 1px solid var(--bordo);
+  color: var(--testo-tenue); font-size: 0.82rem;
+}
+
+/* --- Schermi stretti ---------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .colonna-data, .cella-data { display: none; }
+  .scheda { padding: 18px 16px; }
+}

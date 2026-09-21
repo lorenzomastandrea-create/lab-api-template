@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assistenza ITS — Portale ticket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================================================================
+     INTESTAZIONE
+     =================================================================== -->
+<header class="intestazione">
+  <div class="contenitore intestazione__riga">
+    <div>
+      <p class="intestazione__ente">ITS D.E.Mo.S. — Servizi informatici</p>
+      <h1 class="intestazione__titolo">Assistenza interna</h1>
+    </div>
+    <!-- Lo stato del server: lo riempie app.js chiamando /health -->
+    <div class="stato-server" id="stato-server">
+      <span class="pallino" id="pallino-server"></span>
+      <span id="testo-server">controllo…</span>
+    </div>
+  </div>
+</header>
+
+<main class="contenitore">
+
+  <!-- ===================================================================
+       FORM: apri una segnalazione
+       Ogni campo ha un id: e' cosi' che il JavaScript lo ritrova.
+       =================================================================== -->
+  <section class="scheda">
+    <h2 class="scheda__titolo">Apri una segnalazione</h2>
+    <p class="scheda__nota">Le segnalazioni sono <strong>anonime</strong>: non chiediamo chi sei,
+      solo cosa non funziona. Le leggiamo insieme in aula.</p>
+
+    <form id="form-ticket" class="form">
+      <div class="campo">
+        <label for="campo-titolo">Cosa succede</label>
+        <input type="text" id="campo-titolo" name="title"
+               placeholder="La stampante del piano 2 non stampa">
+        <small class="campo__aiuto">Da 3 a 100 caratteri.</small>
+      </div>
+
+      <div class="campo">
+        <label for="campo-descrizione">Qualche dettaglio in più</label>
+        <textarea id="campo-descrizione" name="description" rows="3"
+                  placeholder="Si accende ma la coda resta ferma da stamattina."></textarea>
+      </div>
+
+      <div class="campo campo--meta">
+        <div>
+          <label for="campo-stato">Stato iniziale</label>
+          <select id="campo-stato" name="status">
+            <option value="aperto" selected>aperto</option>
+            <option value="in_lavorazione">in lavorazione</option>
+            <option value="chiuso">chiuso</option>
+          </select>
+        </div>
+        <div>
+          <label for="campo-chiave">Chiave di servizio</label>
+          <input type="text" id="campo-chiave" placeholder="quella scritta alla lavagna"
+                 autocomplete="off" spellcheck="false">
+          <small class="campo__aiuto">Serve per scrivere. Leggere è libero.</small>
+        </div>
+      </div>
+
+      <button type="submit" id="bottone-invia" class="bottone bottone--primario">
+        Invia la segnalazione
+      </button>
+    </form>
+
+    <!-- Qui app.js scrive l'esito: creato, errore, chiave sbagliata… -->
+    <p id="messaggio-form" class="messaggio" hidden></p>
+  </section>
+
+  <!-- ===================================================================
+       ELENCO dei ticket
+       =================================================================== -->
+  <section class="scheda">
+    <div class="scheda__intestazione">
+      <h2 class="scheda__titolo">Segnalazioni</h2>
+      <div class="filtri">
+        <label for="filtro-stato">Mostra</label>
+        <select id="filtro-stato">
+          <option value="">tutte</option>
+          <option value="aperto">solo aperte</option>
+          <option value="in_lavorazione">solo in lavorazione</option>
+          <option value="chiuso">solo chiuse</option>
+        </select>
+        <button type="button" id="bottone-ricarica" class="bottone bottone--secondario">
+          Ricarica
+        </button>
+      </div>
+    </div>
+
+    <!-- I tre stati possibili dell'elenco. Ne e' visibile uno alla volta:
+         li accende e spegne app.js con l'attributo "hidden". -->
+    <p id="elenco-caricamento" class="messaggio messaggio--attesa">Carico le segnalazioni…</p>
+    <p id="elenco-vuoto" class="messaggio" hidden>Nessuna segnalazione con questo filtro.</p>
+    <p id="elenco-errore" class="messaggio messaggio--errore" hidden></p>
+
+    <table class="tabella" id="tabella-ticket" hidden>
+      <thead>
+        <tr>
+          <th class="colonna-id">#</th>
+          <th>Segnalazione</th>
+          <th class="colonna-stato">Stato</th>
+          <th class="colonna-data">Aperta il</th>
+          <th class="colonna-azioni">Azioni</th>
+        </tr>
+      </thead>
+      <!-- Le righe le costruisce app.js: qui dentro non c'e' niente di scritto a mano. -->
+      <tbody id="righe-ticket"></tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="contenitore">
+    Portale ticket — Laboratorio API + Frontend · ITS D.E.Mo.S., Campobasso<br>
+    Dati di esempio: il database si azzera a ogni riavvio del server.
+  </div>
+</footer>
+
+<!-- L'ordine conta: config.js definisce API_URL, che app.js usa subito. -->
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
