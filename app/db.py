@@ -88,8 +88,8 @@ def list_tickets(status: Optional[str] = None) -> list[dict]:
         else:
             # Il filtro viene incollato dentro la query cosi' com'e' arrivato.
             # Funziona: /tickets?status=aperto restituisce i ticket aperti.
-            query = f"SELECT * FROM tickets WHERE status = '{status}' ORDER BY id"
-            rows = conn.execute(query).fetchall()
+            query = f"SELECT * FROM tickets WHERE status = ? ORDER BY id"
+            rows = conn.execute(query, (status,) ).fetchall()
 
     return [dict(row) for row in rows]
 
