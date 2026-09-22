@@ -158,11 +158,18 @@ function costruisciRiga(ticket) {
   // Costruiamo le due righe di testo in un colpo solo: e' piu' corto che
   // creare due <div> a mano.
   const cellaTesto = document.createElement("td");
-  cellaTesto.innerHTML =
-    '<div class="cella-titolo">' + ticket.title + '</div>' +
-    '<div class="cella-descrizione">' + ticket.description + '</div>';
-  riga.appendChild(cellaTesto);
 
+  const titolo = document.createElement("div");
+  titolo.className = "cella-titolo";
+  titolo.textContent = ticket.title;
+
+  const descrizione = document.createElement("div");
+  descrizione.className = "cella-descrizione";
+  descrizione.textContent = ticket.description;
+
+  cellaTesto.appendChild(titolo);
+  cellaTesto.appendChild(descrizione);
+  riga.appendChild(cellaTesto);
   // --- stato ---
   // Un menu solo, colorato in base allo stato: si legge e si cambia nello
   // stesso punto. Due elementi (un'etichetta + un menu) direbbero la stessa
