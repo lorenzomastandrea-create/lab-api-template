@@ -17,9 +17,9 @@ DB_PATH = "tickets.db"
 # Ticket di esempio, inseriti al primo avvio (vedi seed_if_empty).
 # Servono per avere subito qualcosa da vedere e, piu' avanti, da filtrare.
 SEED_TICKETS = [
-    ("Stampante del piano 2 offline", "Non compare piu' tra le stampanti disponibili.", "aperto"),
-    ("Wi-Fi lento in aula 3", "Dalle 14 in poi la connessione cade di continuo.", "in_lavorazione"),
-    ("Monitor da sostituire", "Il monitor della postazione 7 ha una riga verde fissa.", "chiuso"),
+    ("Stampante del piano 2 offline", "Non compare piu' tra le stampanti disponibili.", "aperto", "Gennaro"),
+    ("Wi-Fi lento in aula 3", "Dalle 14 in poi la connessione cade di continuo.", "in_lavorazione", "samuele"),
+    ("Monitor da sostituire", "Il monitor della postazione 7 ha una riga verde fissa.", "chiuso", "Franca"),
 ]
 
 
@@ -48,7 +48,8 @@ def init_db() -> None:
                 title       TEXT NOT NULL,
                 description TEXT NOT NULL DEFAULT '',
                 status      TEXT NOT NULL DEFAULT 'aperto',
-                created_at  TEXT NOT NULL
+                created_at  TEXT NOT NULL,
+                created_by  TEXT NOT NULL DEFAULT 'anonimo'
             )
             """
         )
@@ -69,8 +70,8 @@ def seed_if_empty() -> int:
 
         created_at = _now()
         conn.executemany(
-            "INSERT INTO tickets (title, description, status, created_at) VALUES (?, ?, ?, ?)",
-            [(title, description, status, created_at) for title, description, status in SEED_TICKETS],
+            "INSERT INTO tickets (title, description, status, created_at, created_by) VALUES (?, ?, ?, ?, ?)",
+            [(title, description, status, created_at, created_by) for title, description, status, created_by in SEED_TICKETS],
         )
 
     return len(SEED_TICKETS)
@@ -106,15 +107,11 @@ def get_ticket(ticket_id: int) -> Optional[dict]:
 
 
 def create_ticket(title: str, description: str, status: str) -> dict:
-    """Inserisce un nuovo ticket e restituisce il ticket appena creato.
-
-    lastrowid e' l'id che SQLite ha assegnato alla riga appena inserita:
-    lo usiamo per rileggere il ticket completo, con id e created_at.
-    """
+    """Inserisce un nuovo ticket e restituisce il ticket appena creato. lastrowid e' l'id che SQLite ha assegnato alla riga appena inserita: lo usiamo per rileggere il ticket completo, con id e created_at."""
     with get_connection() as conn:
         cursor = conn.execute(
-            "INSERT INTO tickets (title, description, status, created_at) VALUES (?, ?, ?, ?)",
-            (title, description, status, _now()),
+            "INSERT INTO tickets (title, description, status, created_at, created_by) VALUES (?, ?, ?, ?, ?)",
+            (title, description, status, created_by, _now()),
         )
         new_id = cursor.lastrowid
 
